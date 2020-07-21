@@ -71,5 +71,69 @@ class TestNetworkGeneration(unittest.TestCase):
         )
 
 
+class TestLetterSelection(unittest.TestCase):
+    """
+    Tests associated with "rolling" or "shaking" the Boggle board.
+    """
+
+    def test_generate_letter_selection_and_get_right_number_of_letters(self):
+        """
+        Roll the actual Boggle dice selection and get the letters back.
+        :return:
+        """
+        letters = data.generate_letters(data.dice)
+
+        self.assertEqual(
+            16,
+            len(letters),
+            "Did not get expected number of letters back."
+        )
+
+
+class TestNetworkMapping(unittest.TestCase):
+    """
+    Tests associated with mapping letters to a network.
+    """
+
+    def test_mapping_to_network_returns_right_letter(self):
+        network = {"A1": [], "B1": [], "C1": []}
+        letters = ["A", "B", "C"]
+
+        network_mapping = data.assign_letters(network, letters)
+
+        self.assertEqual(
+            "A",
+            network_mapping["A1"],
+            "Did not have mapping expected."
+        )
+        self.assertEqual(
+            "B",
+            network_mapping["B1"],
+            "Did not have mapping expected."
+        )
+        self.assertEqual(
+            "C",
+            network_mapping["C1"],
+            "Did not have mapping expected."
+        )
+
+
+class TestDictionary(unittest.TestCase):
+    """
+    Tests associated with loading a dictionary.
+    """
+
+    def test_open_dictionary(self):
+        data.generate_dictionary()
+
+    def test_find_cat_in_dictionary(self):
+        dictionary = data.generate_dictionary()
+        self.assertIn(
+            "CAT",
+            dictionary,
+            "Could not find word 'CAT'."
+        )
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,3 +1,6 @@
+from typing import List
+from bogglers import dictionary_filepath
+import random
 
 """
 data.py
@@ -24,6 +27,18 @@ dice = [
 ]
 
 column_names = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+
+def generate_dictionary(filepath: str = dictionary_filepath) -> List[str]:
+    """
+    Return a dictionary of words.
+    :param filepath: Filepath to the dictionary.
+    :return:
+    """
+    with open(filepath, 'r') as f:
+        dictionary = [line.rstrip() for line in f]
+
+    return dictionary
 
 
 def generate_network(rows: int, columns: int) -> dict:
@@ -71,3 +86,55 @@ def generate_network(rows: int, columns: int) -> dict:
             board_network[tile_name] = adjacent_tiles
 
     return board_network
+
+
+def generate_letters(dice_selection: List[List]) -> List[str]:
+    """
+    Given a selection of dice options, return a list of the letters that are set.
+    TODO: Do we need counts for the number of dice, etc?
+    :param dice_selection: The list of lists of the dice contents.
+    :return: A list of strings of the letters that are selected.
+    """
+    # Shake all the dice...
+    random.shuffle(dice_selection)
+
+    # ...And a random side faces up.
+    letters = [random.sample(die, 1)[0] for die in dice_selection]
+    return letters
+
+
+def assign_letters(network: dict, letters: List[str]) -> dict:
+    """
+    Assign letters to a given network and return the mapping network.
+    :param network: Network dictionary.
+    :param letters: List of letters to be used.
+    :return: Mapping of the network nodes to the letters they represent.
+    """
+    # Put the keys in alphabetical order.
+    keys = [str(key) for key in network.keys()]
+    keys.sort()
+
+    # Go through and match each value, working A1 -> A2 -> etc
+    mapping = {}
+    for n, key in enumerate(keys):
+        mapping[key] = letters[n]
+
+    return mapping
+
+
+class StandardBoggle:
+    """
+    Generate a standard, 4x4 Boggle board, using the standard dice distributions of letters.
+    This is more of a convenience data type than anything else.
+    """
+
+    def __init__(self):
+        self.network = generate_network(4, 4)  # Standard!
+        self.letters = generate_letters(dice)
+        self.mapping = assign_letters(self.network, self.letters)
+
+    def __repr__(self):
+        return " ".join(self.letters[0:4]) + "\n" + \
+               " ".join(self.letters[4:8]) + "\n" + \
+               " ".join(self.letters[8:12]) + "\n" + \
+               " ".join(self.letters[12:16])
