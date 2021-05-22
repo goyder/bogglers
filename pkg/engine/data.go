@@ -4,6 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -26,10 +27,43 @@ var dice = [][]string{
 	{"D", "E", "Y", "L", "V", "R"},
 }
 
+var columnNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 func LoadDictionary(input io.Reader) []string {
 	text, err := ioutil.ReadAll(input)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return strings.Split(string(text), "\n")
+}
+
+func GenerateNetwork() map[string][]string {
+	// I heard you like for loops
+	network := make(map[string][]string)
+	for row := 0; row < 4; row++ {
+		for column := 0; column < 4; column++ {
+			var connections []string
+			for _, columnI := range []int{-1, 0, 1} {
+				for _, rowI := range []int{-1, 0, 1} {
+					// Work through our reasons *not* to add a connection
+					if row+rowI < 0 || row+rowI > 3 {
+						continue
+					}
+					if column+columnI < 0 || column+columnI > 3 {
+						continue
+					}
+					if columnI == 0 && rowI == 0 {
+						continue
+					}
+
+					// But if we're all good, add the connection
+					var target_cell = string(columnNames[column+columnI]) + strconv.FormatInt(int64(row+rowI), 10)
+					connections = append(connections, target_cell)
+				}
+			}
+			var cell = string(columnNames[column]) + strconv.FormatInt(int64(row), 10)
+			network[cell] = connections
+		}
+	}
+	return network
 }
