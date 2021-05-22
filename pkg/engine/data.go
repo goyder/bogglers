@@ -4,6 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"strconv"
 	"strings"
 )
@@ -66,4 +67,21 @@ func GenerateNetwork() map[string][]string {
 		}
 	}
 	return network
+}
+
+func GenerateNetworkLetterMapping(seed int64) map[string]string {
+	rand.Seed(seed)
+	letterMapping := make(map[string]string)
+
+	// We'll work through and map our 16 potential node values onto the dice values
+	i := 0
+	for row := 0; row<4; row++ {
+		for col := 0; col<4; col++ {
+			node := string(columnNames[col]) + strconv.FormatInt(int64(row), 10)
+			letterMapping[node] = dice[i][rand.Intn(5)]
+			i++
+		}
+	}
+
+	return letterMapping
 }

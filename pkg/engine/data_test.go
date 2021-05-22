@@ -94,3 +94,38 @@ func TestGenerateNetworkAndAssessNodes(t *testing.T) {
 			})
 	}
 }
+
+func TestGenerateNetworkLetterMapping(t *testing.T) {
+	// Just do the darn thing
+	letterMapping := GenerateNetworkLetterMapping(0)
+
+	// Assess basic dimensions
+	if len(letterMapping) != 16 {
+		t.Errorf("Did not get expected number of items in letter mapping. Expected %d, got %d",
+			16, len(letterMapping))
+	}
+}
+
+func TestGenerateNetworkLetterMappingDoesNotRepeat(t *testing.T) {
+	// A simple error would be for the same "die" to be called for all values.
+	// Do a basic sense check to ensure this hasn't occurred.
+
+	letterMapping := GenerateNetworkLetterMapping(0)
+
+	// Extract all the values - not really necessary but a good exploration in unrolling maps
+	var values []string
+	for _, v := range letterMapping {
+		values = append(values, v)
+	}
+
+	// Ensure that we have different values...
+	identicalValues := true
+	for i := 1; i < 16; i++ {
+		if values[i] != values[0] {
+			identicalValues = false
+		}
+	}
+	if identicalValues {
+		t.Errorf("All values in letter mapping were the same letter.")
+	}
+}
