@@ -10,7 +10,7 @@ import (
 func main() {
 	// Pull in configs
 	minLetters := flag.Int("minLetters", 3, "Minimum letters to allow as a word.")
-	maxLetters := flag.Int("maxLetters", 8, "Maximum number of letters to search for.")
+	maxLetters := flag.Int("maxLetters", 6, "Maximum number of letters to search for.")
 	dictionaryPath := flag.String("dict", "", "Filepath to dictionary.txt file.")
 
 	// All flags are declared - call it
@@ -32,9 +32,15 @@ func main() {
 	}
 
 	// And go
+	println("Solving board:")
+	game.DisplayBoard()
+	println("================")
+	println("Beginning execution.")
 	words := engine.SolveBoggleNetwork(game, *minLetters, *maxLetters)
 
 	// Outputs
+	println("Execution complete. Words found:")
+	println("================")
 	for _, word := range words {
 		println(word)
 	}

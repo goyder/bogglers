@@ -114,3 +114,13 @@ type BoggleGame struct {
 	Dictionary    []string
 }
 
+// DisplayBoard prints a summary of the game.
+func (game BoggleGame) DisplayBoard() {
+	for row := 0; row<4; row++ {
+		for col := 0; col<4; col++ {
+			node := string(columnNames[col]) + strconv.FormatInt(int64(row), 10)
+			print(game.LetterMapping[node] + " ")
+		}
+		print("\n")
+	}
+}
