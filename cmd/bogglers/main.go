@@ -1,34 +1,28 @@
 package main
 
 import (
+	"flag"
 	"github.com/goyder/bogglers/pkg/engine"
 	"log"
 	"os"
-	"strconv"
 )
 
 func main() {
+	// Pull in configs
+	minLetters := flag.Int("minLetters", 3, "Minimum letters to allow as a word.")
+	maxLetters := flag.Int("maxLetters", 8, "Maximum number of letters to search for.")
+	dictionaryPath := flag.String("dict", "", "Filepath to dictionary.txt file.")
 
-	// The dictionary path is the first argument. We read this in.
-	dictionaryPath := os.Args[1]
-	dictionaryData, err := os.Open(dictionaryPath)
+	// All flags are declared - call it
+	flag.Parse()
+
+	// Read in the dictionary
+	dictionaryData, err := os.Open(*dictionaryPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 	dictionary := engine.LoadDictionary(dictionaryData)
 	dictionaryData.Close()
-
-	// And we pull in configs
-	minLetters, err := strconv.Atoi(os.Args[2])
-	if err != nil {
-		log.Fatal(err)
-	}
-	maxLetters, err := strconv.Atoi(os.Args[3])
-	if err != nil {
-		log.Fatal(err)
-	}
-	// Point of reflection: this very basic form of error checking seems incredibly simplistic and repetitive.
-	// I bet there's a significant body of work in this space.
 
 	// Spin up our inputs
 	game := engine.BoggleGame{
@@ -38,7 +32,7 @@ func main() {
 	}
 
 	// And go
-	words := engine.SolveBoggleNetwork(game, minLetters, maxLetters)
+	words := engine.SolveBoggleNetwork(game, *minLetters, *maxLetters)
 
 	// Outputs
 	for _, word := range words {
