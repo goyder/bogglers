@@ -74,6 +74,8 @@ func GenerateNetwork() map[string][]string {
 }
 
 func GenerateNetworkLetterMapping(seed int64) map[string]string {
+	// Note that even with seeding, the order of the keys is not consistent - maps are not ordered
+	// The node<-->letter mapping will be consistent, however
 	rand.Seed(seed)
 	letterMapping := make(map[string]string)
 
