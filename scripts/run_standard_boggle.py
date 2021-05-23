@@ -3,10 +3,10 @@ from pprint import pprint
 
 board = data.StandardBoggle()
 print("Boggle board to search:")
-
 print("============")
 print(board)
 print("============")
+
 print("Searching...")
 words = search.generate_words(board.network,
                               board.mapping,
