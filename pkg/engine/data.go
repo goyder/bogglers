@@ -109,8 +109,8 @@ func GenerateNetworkLetterMapping(letters [16]string) map[string]string {
 }
 
 type BoggleGame struct {
-	network map[string][]string
-	letterMapping map[string]string
-	dictionary []string
+	Network       map[string][]string
+	LetterMapping map[string]string
+	Dictionary    []string
 }
 

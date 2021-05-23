@@ -23,9 +23,9 @@ func TestSolveBoggleNetwork(t *testing.T) {
 	buffer.WriteString(strings.Join(items, "\n"))
 	var dictionary = LoadDictionary(&buffer)
 	game := BoggleGame{
-		network:       GenerateNetwork(),
-		letterMapping: letterMapping,
-		dictionary:    dictionary,
+		Network:       GenerateNetwork(),
+		LetterMapping: letterMapping,
+		Dictionary:    dictionary,
 	}
 
 	words := SolveBoggleNetwork(game, 3, 10)

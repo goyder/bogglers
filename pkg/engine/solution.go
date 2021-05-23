@@ -28,7 +28,7 @@ func SolveBoggleNetwork(game BoggleGame, minLetters int, maxLetters int) []strin
 	}
 
 	// Search starting from each node
-	for node := range game.network {
+	for node := range game.Network {
 		searchNode(node, &game, &words, &visitedNodes, &visitedLetters, &config)
 	}
 
@@ -38,10 +38,10 @@ func SolveBoggleNetwork(game BoggleGame, minLetters int, maxLetters int) []strin
 // searchNode is a recursive call to exhaustively dig through their connections and see if we can find words.
 func searchNode(node string, game *BoggleGame, words *[]string, visitedNodes *[]string, visitedLetters *[]string, config *SearchConfig) {
 	// Look at the new "word" that has been formed and check if it is a word
-	*visitedLetters = append(*visitedLetters, game.letterMapping[node])
+	*visitedLetters = append(*visitedLetters, game.LetterMapping[node])
 	*visitedNodes = append(*visitedNodes, node)
 	newWord := strings.Join(*visitedLetters, "")
-	if contains(game.dictionary, newWord) && len(newWord) >= config.minLetters && !contains(*words, newWord) {
+	if contains(game.Dictionary, newWord) && len(newWord) >= config.minLetters && !contains(*words, newWord) {
 		*words = append(*words, newWord)
 	}
 
@@ -52,7 +52,7 @@ func searchNode(node string, game *BoggleGame, words *[]string, visitedNodes *[]
 	}
 
 	// Look at all the connected values
-	for _, connectedNode := range game.network[node] {
+	for _, connectedNode := range game.Network[node] {
 		// Make sure we're not going somewhere we've already been
 		if contains(*visitedNodes, connectedNode) {
 			continue
