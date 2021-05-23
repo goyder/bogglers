@@ -73,7 +73,7 @@ func GenerateNetwork() map[string][]string {
 	return network
 }
 
-func GenerateNetworkLetterMapping(seed int64) map[string]string {
+func GenerateRandomNetworkLetterMapping(seed int64) map[string]string {
 	// Note that even with seeding, the order of the keys is not consistent - maps are not ordered
 	// The node<-->letter mapping will be consistent, however
 	rand.Seed(seed)
@@ -90,3 +90,27 @@ func GenerateNetworkLetterMapping(seed int64) map[string]string {
 	}
 	return letterMapping
 }
+
+// GenerateNetworkLetterMapping will create a network mapping with a pre-provided list of letters.
+func GenerateNetworkLetterMapping(letters [16]string) map[string]string {
+	letterMapping := make(map[string]string)
+
+	// Work through and map the 16 values to the letter values
+	// We complete a row and move onto the next one
+	i := 0
+	for row := 0; row<4; row++ {
+		for col := 0; col<4; col++ {
+			node := string(columnNames[col]) + strconv.FormatInt(int64(row), 10)
+			letterMapping[node] = letters[i]
+			i++
+		}
+	}
+	return letterMapping
+}
+
+type BoggleGame struct {
+	network map[string][]string
+	letterMapping map[string]string
+	dictionary []string
+}
+

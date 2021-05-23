@@ -6,14 +6,6 @@ import (
 	"testing"
 )
 
-func contains(items []string, item string) bool {
-	for _, s := range items {
-		if item == s {
-			return true
-		}
-	}
-	return false
-}
 
 func TestLoadDictionary(t *testing.T) {
 	// Produce a test list of items
@@ -95,9 +87,9 @@ func TestGenerateNetworkAndAssessNodes(t *testing.T) {
 	}
 }
 
-func TestGenerateNetworkLetterMapping(t *testing.T) {
+func TestGenerateRandomNetworkLetterMapping(t *testing.T) {
 	// Just do the darn thing
-	letterMapping := GenerateNetworkLetterMapping(0)
+	letterMapping := GenerateRandomNetworkLetterMapping(0)
 
 	// Assess basic dimensions
 	if len(letterMapping) != 16 {
@@ -106,11 +98,39 @@ func TestGenerateNetworkLetterMapping(t *testing.T) {
 	}
 }
 
+func TestGenerateNetworkLetterMapping(t *testing.T) {
+	letterMapping := GenerateNetworkLetterMapping(letters)
+
+	// Spot check key items
+	letterLocations := []struct {
+		node string
+		letter string
+	}{
+		{"A0", "C"},
+		{"D0", "QU"},
+		{"A3", "B"},
+		{"D3", "E"},
+		{"A2", "S"},
+	}
+	for _, location := range letterLocations {
+		t.Run("Letter mapping for node " + location.node,
+			func (t *testing.T) {
+				expectedLetter := location.letter
+				actualLetter := letterMapping[location.node]
+				if expectedLetter != actualLetter {
+					t.Errorf("Letter mapping for node did not match. Node %s, expected %s, got %s.",
+						location.node, expectedLetter, actualLetter)
+				}
+		},
+		)
+	}
+}
+
 func TestGenerateNetworkLetterMappingDoesNotRepeat(t *testing.T) {
 	// A simple error would be for the same "die" to be called for all values.
 	// Do a basic sense check to ensure this hasn't occurred.
 
-	letterMapping := GenerateNetworkLetterMapping(0)
+	letterMapping := GenerateRandomNetworkLetterMapping(0)
 
 	// Extract all the values - not really necessary but a good exploration in unrolling maps
 	var values []string
