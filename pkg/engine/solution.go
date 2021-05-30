@@ -16,22 +16,35 @@ func contains(items []string, item string) bool {
 	return false
 }
 
-// SolveBoggleNetwork is the interface to solve a Boggle game.
-func SolveBoggleNetwork(game BoggleGame, minLetters int, maxLetters int) []string {
-	// Create the storage locations for what we'll catch
-	var words []string
+// We implement our engine as an interface.
+type engine interface {
+	solve(game *BoggleGame, config *SearchConfig) []string
+}
+
+type exhaustiveSearchEngine struct {
+}
+
+func (e exhaustiveSearchEngine) solve(game *BoggleGame, config *SearchConfig) []string {
 	var visitedNodes []string
 	var visitedLetters []string
+	var words []string
+
+	for node := range game.Network {
+		searchNode(node, game, &(words), &(visitedNodes), &(visitedLetters), config)
+	}
+
+	return words
+}
+
+// SolveBoggleNetwork is the interface to solve a Boggle game.
+func SolveBoggleNetwork(game BoggleGame, engine engine, minLetters int, maxLetters int) []string {
+	// Create the storage locations for what we'll catch
 	config := SearchConfig{
 		minLetters: minLetters,
 		maxLetters: maxLetters,
 	}
 
-	// Search starting from each node
-	for node := range game.Network {
-		searchNode(node, &game, &words, &visitedNodes, &visitedLetters, &config)
-	}
-
+	words := engine.solve(&game, &config)
 	return words
 }
 

@@ -15,6 +15,7 @@ var letters = [16]string{
 "B", "A", "N", "E",
 }
 var letterMapping = GenerateNetworkLetterMapping(letters)
+var ESE = exhaustiveSearchEngine{}
 
 // TestSolveBoggleNetwork will test the solution of a Boggle network to get some standard words back.
 func TestSolveBoggleNetwork(t *testing.T) {
@@ -28,7 +29,7 @@ func TestSolveBoggleNetwork(t *testing.T) {
 		Dictionary:    dictionary,
 	}
 
-	words := SolveBoggleNetwork(game, 3, 10)
+	words := SolveBoggleNetwork(game, ESE, 3, 10)
 	for _, item := range items {
 		if !contains(words, item) {
 			t.Errorf("Did not find expected word in returned words: %s", item)
