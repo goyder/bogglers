@@ -30,13 +30,14 @@ func main() {
 		LetterMapping: engine.GenerateRandomNetworkLetterMapping(1),
 		Dictionary:    dictionary,
 	}
+	var trieEngine = engine.TrieSearchEngine{}
 
 	// And go
 	println("Solving board:")
 	game.DisplayBoard()
 	println("================")
 	println("Beginning execution.")
-	words := engine.SolveBoggleNetwork(game, *minLetters, *maxLetters)
+	words := engine.SolveBoggleNetwork(game, trieEngine, *minLetters, *maxLetters)
 
 	// Outputs
 	println("Execution complete. Words found:")
