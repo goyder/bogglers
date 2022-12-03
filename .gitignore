@@ -1,6 +1,3 @@
 # Python stuff
 *.egg-info
 */__pycache__/*
-
-# JetBrains things
-.idea/*
